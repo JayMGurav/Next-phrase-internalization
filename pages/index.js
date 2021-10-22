@@ -16,13 +16,10 @@ export default function Home() {
   const { t: commonTranslate } = useTranslation("common");
   const router = useRouter();
 
-  const [selectedLocale, setSelectedLocale] = useState(() =>
-    ["en", "es", "de"].includes(router.locale) ? router.locale : "en"
-  );
+  const [selectedLocale, setSelectedLocale] = useState(router.locale || "en");
 
-  const handleChange = (e) => {
+  const handleChange = (nextLocale) => {
     const { pathname, asPath, query } = router;
-    const { value: nextLocale } = e.target;
     setSelectedLocale(nextLocale);
     router.push({ pathname, query }, asPath, { locale: nextLocale });
   };
@@ -31,7 +28,7 @@ export default function Home() {
   return (
     <div className={styles.container}>
       <p>
-        locale: <strong>{router.locale}</strong>
+        selected locale: <strong>{router.locale}</strong>
       </p>
       <p>
         default: locale: <strong>{router.defaultLocale}</strong>
@@ -40,10 +37,15 @@ export default function Home() {
       <h1>{homePageTranslate("h1")}</h1>
       <p>{homePageTranslate("caption")}</p>
       <label htmlFor="local_select"> {commonTranslate("change-locale")} </label>
-      <select id="local_select" value={selectedLocale} onChange={handleChange}>
-        <option value="en">En</option>
-        <option value="de">De</option>
-        <option value="es">Es</option>
+      <select
+        id="local_select"
+        value={selectedLocale}
+        onChange={(e) => handleChange(e.target.value)}
+      >
+        <option value="en">English - en</option>
+        <option value="de">German - de</option>
+        <option value="es">Spanish - es</option>
+        <option value="fr">French - fr</option>
       </select>
     </div>
   );
